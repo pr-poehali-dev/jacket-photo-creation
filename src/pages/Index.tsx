@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 
@@ -94,6 +95,7 @@ export default function Index() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 25000]);
   const [filterSize, setFilterSize] = useState<string>('Все');
   const [sortBy, setSortBy] = useState<string>('default');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const categories = ['Все', 'Зима', 'Весна', 'Демисезон'];
   const sizes = ['Все', 'S', 'M', 'L', 'XL'];
@@ -119,7 +121,8 @@ export default function Index() {
       const categoryMatch = selectedCategory === 'Все' || p.category === selectedCategory;
       const priceMatch = p.price >= priceRange[0] && p.price <= priceRange[1];
       const sizeMatch = filterSize === 'Все' || p.sizes.includes(filterSize);
-      return categoryMatch && priceMatch && sizeMatch;
+      const searchMatch = searchQuery === '' || p.name.toLowerCase().includes(searchQuery.toLowerCase());
+      return categoryMatch && priceMatch && sizeMatch && searchMatch;
     })
     .sort((a, b) => {
       switch (sortBy) {
@@ -289,13 +292,35 @@ export default function Index() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
-        <section className="mb-12 text-center animate-fade-in">
+        <section className="mb-8 text-center animate-fade-in">
           <h2 className="text-5xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             Коллекция 2025
           </h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+          <p className="text-lg text-muted-foreground max-w-2xl mx-auto mb-6">
             Откройте для себя стильные куртки на любой сезон
           </p>
+          <div className="max-w-xl mx-auto">
+            <div className="relative">
+              <Icon name="Search" className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground" size={20} />
+              <Input
+                type="text"
+                placeholder="Поиск по названию куртки..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-12 pr-12 h-12 text-base"
+              />
+              {searchQuery && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="absolute right-2 top-1/2 -translate-y-1/2"
+                  onClick={() => setSearchQuery('')}
+                >
+                  <Icon name="X" size={20} />
+                </Button>
+              )}
+            </div>
+          </div>
         </section>
 
         <div className="mb-8 space-y-6">
@@ -359,7 +384,7 @@ export default function Index() {
                 </div>
               </div>
 
-              {(selectedCategory !== 'Все' || filterSize !== 'Все' || priceRange[0] > 0 || priceRange[1] < 25000 || sortBy !== 'default') && (
+              {(selectedCategory !== 'Все' || filterSize !== 'Все' || priceRange[0] > 0 || priceRange[1] < 25000 || sortBy !== 'default' || searchQuery !== '') && (
                 <div className="mt-4 pt-4 border-t flex items-center justify-between">
                   <p className="text-sm text-muted-foreground">
                     Найдено товаров: {filteredAndSortedProducts.length}
@@ -372,10 +397,11 @@ export default function Index() {
                       setFilterSize('Все');
                       setPriceRange([0, 25000]);
                       setSortBy('default');
+                      setSearchQuery('');
                     }}
                   >
                     <Icon name="X" size={16} className="mr-2" />
-                    Сбросить фильтры
+                    Сбросить всё
                   </Button>
                 </div>
               )}
