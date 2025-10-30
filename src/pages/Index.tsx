@@ -470,6 +470,97 @@ export default function Index() {
 
       <main className="container mx-auto px-4 py-8">
         <section className="mb-10 animate-fade-in">
+          <div className="bg-gradient-to-r from-orange-500/10 via-red-500/10 to-orange-500/10 rounded-2xl p-6 sm:p-8 shadow-lg border-2 border-orange-500/30 mb-6 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent animate-pulse"></div>
+            <div className="relative z-10">
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
+                <div className="text-center lg:text-left flex-1">
+                  <div className="flex items-center justify-center lg:justify-start gap-2 mb-3">
+                    <Icon name="Tag" size={28} className="text-orange-600" />
+                    <h3 className="text-2xl sm:text-3xl font-bold text-foreground">Активные промокоды</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground mb-4">
+                    Используй промокоды при оформлении заказа и получи выгоду!
+                  </p>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className="bg-purple-600 text-white font-bold text-xs">WINTER2025</Badge>
+                        <Badge variant="outline" className="text-[10px] border-purple-500/50">до 1 марта</Badge>
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">Скидка 15%</p>
+                      <p className="text-xs text-muted-foreground">на весь заказ</p>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-red-500/20 to-red-600/10 border border-red-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer relative overflow-hidden">
+                      <div className="absolute top-0 right-0 bg-red-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                        HOT 🔥
+                      </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className="bg-red-600 text-white font-bold text-xs">FLASH50</Badge>
+                        <Badge variant="outline" className="text-[10px] border-red-500/50">до 15 ноя</Badge>
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">Скидка 50%</p>
+                      <p className="text-xs text-muted-foreground">флеш-распродажа</p>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className="bg-green-600 text-white font-bold text-xs">FREESHIP</Badge>
+                        <Icon name="Truck" size={16} className="text-green-600" />
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">Бесплатная доставка</p>
+                      <p className="text-xs text-muted-foreground">экономия до 1500 ₽</p>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-blue-500/20 to-blue-600/10 border border-blue-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer">
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className="bg-blue-600 text-white font-bold text-xs">SAVE500</Badge>
+                        <Icon name="Gift" size={16} className="text-blue-600" />
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">Скидка 500 ₽</p>
+                      <p className="text-xs text-muted-foreground">на первый заказ</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex flex-col items-center gap-3">
+                  <div className="bg-background/80 backdrop-blur-sm rounded-xl p-4 border-2 border-orange-500/30 shadow-lg">
+                    <div className="text-center mb-2">
+                      <Icon name="Clock" size={24} className="text-orange-600 mx-auto mb-1" />
+                      <p className="text-xs text-muted-foreground font-semibold">Акция закончится через</p>
+                    </div>
+                    <div className="flex items-center gap-2 text-2xl font-bold text-orange-600">
+                      <div className="bg-background px-3 py-2 rounded-lg shadow-md min-w-[60px] text-center border border-orange-200">
+                        {String(timeLeft.hours).padStart(2, '0')}
+                        <div className="text-[10px] text-muted-foreground font-normal">ч</div>
+                      </div>
+                      <div>:</div>
+                      <div className="bg-background px-3 py-2 rounded-lg shadow-md min-w-[60px] text-center border border-orange-200">
+                        {String(timeLeft.minutes).padStart(2, '0')}
+                        <div className="text-[10px] text-muted-foreground font-normal">м</div>
+                      </div>
+                      <div>:</div>
+                      <div className="bg-background px-3 py-2 rounded-lg shadow-md min-w-[60px] text-center border border-orange-200">
+                        {String(timeLeft.seconds).padStart(2, '0')}
+                        <div className="text-[10px] text-muted-foreground font-normal">с</div>
+                      </div>
+                    </div>
+                  </div>
+                  <Button 
+                    size="lg"
+                    className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-bold shadow-lg"
+                    onClick={() => window.scrollTo({ top: 800, behavior: 'smooth' })}
+                  >
+                    <Icon name="Sparkles" size={20} className="mr-2" />
+                    Смотреть товары
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6">
             <Card className="bg-gradient-to-br from-red-500 to-orange-500 text-white overflow-hidden relative group hover:shadow-2xl transition-shadow">
               <CardContent className="p-8 relative z-10">
