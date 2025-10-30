@@ -42,9 +42,65 @@ export default function Checkout() {
     deliveryTime: 'anytime'
   });
 
+  const [promoCode, setPromoCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState<{code: string, discount: number} | null>(null);
+
+  const promoCodes: {[key: string]: {discount: number, type: 'percent' | 'fixed'}} = {
+    'WINTER2025': { discount: 15, type: 'percent' },
+    'SAVE500': { discount: 500, type: 'fixed' },
+    'NEW10': { discount: 10, type: 'percent' },
+    'FREESHIP': { discount: 0, type: 'fixed' }
+  };
+
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const deliveryPrice = formData.deliveryMethod === 'courier' ? 500 : formData.deliveryMethod === 'express' ? 1500 : 0;
-  const finalPrice = totalPrice + deliveryPrice;
+  let deliveryPrice = formData.deliveryMethod === 'courier' ? 500 : formData.deliveryMethod === 'express' ? 1500 : 0;
+  
+  if (appliedPromo?.code === 'FREESHIP') {
+    deliveryPrice = 0;
+  }
+
+  let discount = 0;
+  if (appliedPromo) {
+    if (appliedPromo.code === 'FREESHIP') {
+      discount = formData.deliveryMethod === 'courier' ? 500 : formData.deliveryMethod === 'express' ? 1500 : 0;
+    } else if (promoCodes[appliedPromo.code].type === 'percent') {
+      discount = Math.round(totalPrice * (appliedPromo.discount / 100));
+    } else {
+      discount = appliedPromo.discount;
+    }
+  }
+
+  const finalPrice = totalPrice + deliveryPrice - discount;
+
+  const applyPromoCode = () => {
+    const upperCode = promoCode.toUpperCase();
+    if (promoCodes[upperCode]) {
+      setAppliedPromo({ code: upperCode, discount: promoCodes[upperCode].discount });
+      toast({
+        title: 'Промокод применён! 🎉',
+        description: upperCode === 'FREESHIP' 
+          ? 'Бесплатная доставка активирована'
+          : promoCodes[upperCode].type === 'percent'
+          ? `Скидка ${promoCodes[upperCode].discount}% на заказ`
+          : `Скидка ${promoCodes[upperCode].discount} ₽ на заказ`,
+      });
+    } else {
+      toast({
+        title: 'Неверный промокод',
+        description: 'Проверьте правильность ввода',
+        variant: 'destructive'
+      });
+    }
+  };
+
+  const removePromoCode = () => {
+    setAppliedPromo(null);
+    setPromoCode('');
+    toast({
+      title: 'Промокод удалён',
+      description: 'Скидка отменена',
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -366,6 +422,56 @@ export default function Checkout() {
 
                 <Separator />
 
+                <div>
+                  <Label htmlFor="promoCode" className="text-sm font-semibold mb-2 block">
+                    Промокод
+                  </Label>
+                  {appliedPromo ? (
+                    <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Icon name="CheckCircle2" size={20} className="text-green-600" />
+                        <div>
+                          <p className="font-semibold text-green-800">{appliedPromo.code}</p>
+                          <p className="text-xs text-green-600">
+                            {appliedPromo.code === 'FREESHIP' 
+                              ? 'Бесплатная доставка'
+                              : `Скидка ${appliedPromo.discount}${promoCodes[appliedPromo.code].type === 'percent' ? '%' : ' ₽'}`}
+                          </p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={removePromoCode}
+                        className="text-green-700 hover:text-green-900"
+                      >
+                        <Icon name="X" size={18} />
+                      </Button>
+                    </div>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Input
+                        id="promoCode"
+                        placeholder="Введите промокод"
+                        value={promoCode}
+                        onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                        className="flex-1"
+                      />
+                      <Button
+                        variant="outline"
+                        onClick={applyPromoCode}
+                        disabled={!promoCode}
+                        className="gap-2"
+                      >
+                        <Icon name="Tag" size={16} />
+                        Применить
+                      </Button>
+                    </div>
+                  )}
+                </div>
+
+                <Separator />
+
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
                     <span>Товары ({cart.reduce((sum, item) => sum + item.quantity, 0)} шт)</span>
@@ -373,8 +479,24 @@ export default function Checkout() {
                   </div>
                   <div className="flex justify-between text-sm">
                     <span>Доставка</span>
-                    <span>{deliveryPrice > 0 ? `${deliveryPrice} ₽` : 'Бесплатно'}</span>
+                    <span className={appliedPromo?.code === 'FREESHIP' ? 'line-through text-muted-foreground' : ''}>
+                      {(formData.deliveryMethod === 'courier' ? 500 : formData.deliveryMethod === 'express' ? 1500 : 0) > 0 
+                        ? `${formData.deliveryMethod === 'courier' ? 500 : 1500} ₽` 
+                        : 'Бесплатно'}
+                    </span>
                   </div>
+                  {appliedPromo?.code === 'FREESHIP' && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>Бесплатная доставка</span>
+                      <span>0 ₽</span>
+                    </div>
+                  )}
+                  {discount > 0 && appliedPromo?.code !== 'FREESHIP' && (
+                    <div className="flex justify-between text-sm text-green-600">
+                      <span>Скидка по промокоду</span>
+                      <span>-{discount.toLocaleString('ru-RU')} ₽</span>
+                    </div>
+                  )}
                 </div>
 
                 <Separator />
@@ -383,6 +505,11 @@ export default function Checkout() {
                   <span>Итого:</span>
                   <span className="text-primary">{finalPrice.toLocaleString('ru-RU')} ₽</span>
                 </div>
+                {discount > 0 && (
+                  <p className="text-sm text-green-600 text-center font-semibold">
+                    Вы экономите {discount.toLocaleString('ru-RU')} ₽ 🎉
+                  </p>
+                )}
 
                 <Button 
                   className="w-full h-12 text-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
