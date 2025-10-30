@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import Icon from '@/components/ui/icon';
-import { useCart } from '@/context/CartContext';
+import { useToast } from '@/hooks/use-toast';
 
 interface Product {
   id: number;
@@ -104,7 +104,7 @@ const products: Product[] = [
 export default function ProductDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { addToCart } = useCart();
+  const { toast } = useToast();
   const [product, setProduct] = useState<Product | null>(null);
   const [selectedSize, setSelectedSize] = useState<string>('');
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -132,14 +132,33 @@ export default function ProductDetail() {
   }
 
   const handleAddToCart = () => {
-    addToCart({
+    const cartData = localStorage.getItem('cart');
+    const cart = cartData ? JSON.parse(cartData) : [];
+    
+    const cartItem = {
       id: product.id,
       name: product.name,
       price: product.price,
       image: product.image,
-      size: selectedSize,
-      color: selectedColor,
+      selectedSize: selectedSize,
       quantity: quantity
+    };
+    
+    const existingItemIndex = cart.findIndex((item: any) => 
+      item.id === product.id && item.selectedSize === selectedSize
+    );
+    
+    if (existingItemIndex > -1) {
+      cart[existingItemIndex].quantity += quantity;
+    } else {
+      cart.push(cartItem);
+    }
+    
+    localStorage.setItem('cart', JSON.stringify(cart));
+    
+    toast({
+      title: "Добавлено в корзину",
+      description: `${product.name} (${selectedSize}) — ${quantity} шт.`,
     });
   };
 
