@@ -6,6 +6,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 import { useToast } from '@/hooks/use-toast';
 
@@ -31,12 +33,17 @@ export default function Checkout() {
     address: '',
     city: '',
     postalCode: '',
+    apartment: '',
+    floor: '',
+    entrance: '',
+    comment: '',
     paymentMethod: 'card',
-    deliveryMethod: 'courier'
+    deliveryMethod: 'courier',
+    deliveryTime: 'anytime'
   });
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  const deliveryPrice = formData.deliveryMethod === 'courier' ? 500 : 0;
+  const deliveryPrice = formData.deliveryMethod === 'courier' ? 500 : formData.deliveryMethod === 'express' ? 1500 : 0;
   const finalPrice = totalPrice + deliveryPrice;
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -169,14 +176,46 @@ export default function Checkout() {
                   </div>
                 </div>
                 <div>
-                  <Label htmlFor="address">Улица, дом, квартира *</Label>
+                  <Label htmlFor="address">Улица и дом *</Label>
                   <Input
                     id="address"
-                    placeholder="ул. Примерная, д. 10, кв. 5"
+                    placeholder="ул. Примерная, д. 10"
                     value={formData.address}
                     onChange={(e) => setFormData({ ...formData, address: e.target.value })}
                     className="mt-1"
                   />
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <Label htmlFor="apartment">Квартира</Label>
+                    <Input
+                      id="apartment"
+                      placeholder="5"
+                      value={formData.apartment}
+                      onChange={(e) => setFormData({ ...formData, apartment: e.target.value })}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="floor">Этаж</Label>
+                    <Input
+                      id="floor"
+                      placeholder="3"
+                      value={formData.floor}
+                      onChange={(e) => setFormData({ ...formData, floor: e.target.value })}
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="entrance">Подъезд</Label>
+                    <Input
+                      id="entrance"
+                      placeholder="2"
+                      value={formData.entrance}
+                      onChange={(e) => setFormData({ ...formData, entrance: e.target.value })}
+                      className="mt-1"
+                    />
+                  </div>
                 </div>
               </CardContent>
             </Card>
@@ -188,23 +227,74 @@ export default function Checkout() {
                   Способ доставки
                 </CardTitle>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-4">
                 <RadioGroup value={formData.deliveryMethod} onValueChange={(value) => setFormData({ ...formData, deliveryMethod: value })}>
                   <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer">
                     <RadioGroupItem value="courier" id="courier" />
                     <Label htmlFor="courier" className="flex-1 cursor-pointer">
-                      <div className="font-semibold">Курьерская доставка</div>
+                      <div className="font-semibold flex items-center gap-2">
+                        <Icon name="Bike" size={18} />
+                        Курьерская доставка
+                      </div>
                       <div className="text-sm text-muted-foreground">3-5 рабочих дней • 500 ₽</div>
                     </Label>
                   </div>
                   <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer">
                     <RadioGroupItem value="pickup" id="pickup" />
                     <Label htmlFor="pickup" className="flex-1 cursor-pointer">
-                      <div className="font-semibold">Самовывоз</div>
+                      <div className="font-semibold flex items-center gap-2">
+                        <Icon name="Store" size={18} />
+                        Самовывоз
+                      </div>
                       <div className="text-sm text-muted-foreground">Готов к выдаче через 1-2 дня • Бесплатно</div>
                     </Label>
                   </div>
+                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-muted/50 cursor-pointer">
+                    <RadioGroupItem value="express" id="express" />
+                    <Label htmlFor="express" className="flex-1 cursor-pointer">
+                      <div className="font-semibold flex items-center gap-2">
+                        <Icon name="Zap" size={18} className="text-orange-500" />
+                        Экспресс-доставка
+                      </div>
+                      <div className="text-sm text-muted-foreground">В течение 24 часов • 1500 ₽</div>
+                    </Label>
+                  </div>
                 </RadioGroup>
+                
+                {formData.deliveryMethod === 'courier' || formData.deliveryMethod === 'express' ? (
+                  <div>
+                    <Label htmlFor="deliveryTime">Удобное время доставки</Label>
+                    <Select value={formData.deliveryTime} onValueChange={(value) => setFormData({ ...formData, deliveryTime: value })}>
+                      <SelectTrigger className="mt-1">
+                        <SelectValue placeholder="Выберите время" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="anytime">Любое время</SelectItem>
+                        <SelectItem value="morning">Утро (9:00 - 12:00)</SelectItem>
+                        <SelectItem value="afternoon">День (12:00 - 15:00)</SelectItem>
+                        <SelectItem value="evening">Вечер (15:00 - 18:00)</SelectItem>
+                        <SelectItem value="late">Поздний вечер (18:00 - 21:00)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+              </CardContent>
+            </Card>
+
+            <Card className="animate-fade-in" style={{ animationDelay: '250ms' }}>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Icon name="MessageSquare" size={24} />
+                  Комментарий к заказу
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <Textarea
+                  placeholder="Укажите дополнительные пожелания: код домофона, особенности подъезда и т.д."
+                  value={formData.comment}
+                  onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
+                  rows={4}
+                />
               </CardContent>
             </Card>
 
