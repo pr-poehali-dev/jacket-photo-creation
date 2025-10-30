@@ -32,7 +32,7 @@ const products: Product[] = [
     name: 'Purple Winter Jacket',
     price: 12990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/b88b744f-24d8-48fb-9014-f4abbac17917.jpg',
-    category: 'Зима',
+    category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
     popularity: 95
@@ -42,7 +42,7 @@ const products: Product[] = [
     name: 'Orange Bomber',
     price: 8990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/99771fe5-6707-4a8c-9a70-695388bc82de.jpg',
-    category: 'Весна',
+    category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     popularity: 88
   },
@@ -51,7 +51,7 @@ const products: Product[] = [
     name: 'Pink Puffer',
     price: 14990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/f0dfce24-5fb1-41d4-80f5-673eb9eb8a0c.jpg',
-    category: 'Зима',
+    category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
     popularity: 92
@@ -61,7 +61,7 @@ const products: Product[] = [
     name: 'Black Leather Jacket',
     price: 19990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/b88b744f-24d8-48fb-9014-f4abbac17917.jpg',
-    category: 'Демисезон',
+    category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     popularity: 78
   },
@@ -70,7 +70,7 @@ const products: Product[] = [
     name: 'Denim Jacket',
     price: 6990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/99771fe5-6707-4a8c-9a70-695388bc82de.jpg',
-    category: 'Весна',
+    category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     popularity: 85
   },
@@ -79,10 +79,122 @@ const products: Product[] = [
     name: 'Green Parka',
     price: 16990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/f0dfce24-5fb1-41d4-80f5-673eb9eb8a0c.jpg',
-    category: 'Зима',
+    category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
     popularity: 90
+  },
+  {
+    id: 7,
+    name: 'Вязаная шапка с помпоном',
+    price: 1990,
+    image: 'https://images.unsplash.com/photo-1576871337622-98d48d1cf531?w=800&q=80',
+    category: 'Шапки',
+    sizes: ['Универсальный'],
+    isNew: true,
+    popularity: 87
+  },
+  {
+    id: 8,
+    name: 'Шапка-ушанка',
+    price: 2990,
+    image: 'https://images.unsplash.com/photo-1605177811707-5f8d02e5bef0?w=800&q=80',
+    category: 'Шапки',
+    sizes: ['S/M', 'L/XL'],
+    popularity: 93
+  },
+  {
+    id: 9,
+    name: 'Спортивная шапка',
+    price: 1490,
+    image: 'https://images.unsplash.com/photo-1517583010307-3f789911b89c?w=800&q=80',
+    category: 'Шапки',
+    sizes: ['Универсальный'],
+    popularity: 80
+  },
+  {
+    id: 10,
+    name: 'Зимние ботинки Timberland',
+    price: 15990,
+    image: 'https://images.unsplash.com/photo-1608256246200-53e635b5b65f?w=800&q=80',
+    category: 'Ботинки',
+    sizes: ['39', '40', '41', '42', '43', '44', '45'],
+    isNew: true,
+    popularity: 96
+  },
+  {
+    id: 11,
+    name: 'Треккинговые ботинки',
+    price: 12990,
+    image: 'https://images.unsplash.com/photo-1542840410-3092f99611a3?w=800&q=80',
+    category: 'Ботинки',
+    sizes: ['39', '40', '41', '42', '43', '44'],
+    popularity: 89
+  },
+  {
+    id: 12,
+    name: 'Кожаные ботинки Chelsea',
+    price: 18990,
+    image: 'https://images.unsplash.com/photo-1533867617858-e7b97e060509?w=800&q=80',
+    category: 'Ботинки',
+    sizes: ['40', '41', '42', '43', '44'],
+    popularity: 84
+  },
+  {
+    id: 13,
+    name: 'Кожаные рукавицы',
+    price: 3990,
+    image: 'https://images.unsplash.com/photo-1609367275680-5fff8c06c0ec?w=800&q=80',
+    category: 'Рукавицы',
+    sizes: ['S', 'M', 'L', 'XL'],
+    isNew: true,
+    popularity: 86
+  },
+  {
+    id: 14,
+    name: 'Вязаные варежки',
+    price: 1490,
+    image: 'https://images.unsplash.com/photo-1611078489935-0cb964de46d6?w=800&q=80',
+    category: 'Рукавицы',
+    sizes: ['S/M', 'L/XL'],
+    popularity: 82
+  },
+  {
+    id: 15,
+    name: 'Перчатки с сенсорными пальцами',
+    price: 2490,
+    image: 'https://images.unsplash.com/photo-1606902965551-dce093cda6e7?w=800&q=80',
+    category: 'Рукавицы',
+    sizes: ['S', 'M', 'L', 'XL'],
+    popularity: 91
+  },
+  {
+    id: 16,
+    name: 'Зимние штаны с утеплителем',
+    price: 8990,
+    image: 'https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=800&q=80',
+    category: 'Штаны',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    isNew: true,
+    popularity: 88
+  },
+  {
+    id: 17,
+    name: 'Горнолыжные брюки',
+    price: 12990,
+    image: 'https://images.unsplash.com/photo-1565945774331-39e06e2dc160?w=800&q=80',
+    category: 'Штаны',
+    sizes: ['S', 'M', 'L', 'XL'],
+    popularity: 94
+  },
+  {
+    id: 18,
+    name: 'Утепленные карго',
+    price: 7990,
+    image: 'https://images.unsplash.com/photo-1506629082955-511b1aa562c8?w=800&q=80',
+    category: 'Штаны',
+    sizes: ['S', 'M', 'L', 'XL', 'XXL'],
+    popularity: 85
   }
 ];
 
@@ -97,8 +209,8 @@ export default function Index() {
   const [sortBy, setSortBy] = useState<string>('default');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  const categories = ['Все', 'Зима', 'Весна', 'Демисезон'];
-  const sizes = ['Все', 'S', 'M', 'L', 'XL'];
+  const categories = ['Все', 'Куртки', 'Шапки', 'Ботинки', 'Рукавицы', 'Штаны'];
+  const sizes = ['Все', 'S', 'M', 'L', 'XL', '39', '40', '41', '42', '43', '44', '45', 'S/M', 'L/XL', 'Универсальный'];
 
   useEffect(() => {
     const saved = localStorage.getItem('favorites');
