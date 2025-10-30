@@ -208,6 +208,7 @@ export default function Index() {
   const [filterSize, setFilterSize] = useState<string>('Все');
   const [sortBy, setSortBy] = useState<string>('default');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   const categories = ['Все', 'Куртки', 'Шапки', 'Ботинки', 'Рукавицы', 'Штаны'];
   const sizes = ['Все', 'S', 'M', 'L', 'XL', '39', '40', '41', '42', '43', '44', '45', 'S/M', 'L/XL', 'Универсальный'];
@@ -217,6 +218,27 @@ export default function Index() {
     if (saved) {
       setFavorites(JSON.parse(saved));
     }
+  }, []);
+
+  useEffect(() => {
+    const calculateTimeLeft = () => {
+      const now = new Date();
+      const endOfDay = new Date();
+      endOfDay.setHours(23, 59, 59, 999);
+      const difference = endOfDay.getTime() - now.getTime();
+
+      if (difference > 0) {
+        const hours = Math.floor((difference / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((difference / 1000 / 60) % 60);
+        const seconds = Math.floor((difference / 1000) % 60);
+        setTimeLeft({ hours, minutes, seconds });
+      }
+    };
+
+    calculateTimeLeft();
+    const timer = setInterval(calculateTimeLeft, 1000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const toggleFavorite = (productId: number) => {
@@ -413,11 +435,39 @@ export default function Index() {
                   Горящее предложение
                 </Badge>
                 <h3 className="text-3xl font-black mb-2">Скидки до 50%</h3>
-                <p className="text-white/90 mb-6 text-lg">
+                <p className="text-white/90 mb-4 text-lg">
                   На зимние куртки и верхнюю одежду
                 </p>
+                <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 mb-6">
+                  <p className="text-sm text-white/80 mb-2 font-semibold flex items-center gap-2">
+                    <Icon name="Clock" size={16} />
+                    Акция заканчивается через:
+                  </p>
+                  <div className="flex gap-3 justify-center">
+                    <div className="text-center">
+                      <div className="bg-white/30 backdrop-blur-md rounded-lg px-3 py-2 min-w-[60px]">
+                        <div className="text-2xl font-black">{timeLeft.hours.toString().padStart(2, '0')}</div>
+                      </div>
+                      <div className="text-xs mt-1 text-white/80">часов</div>
+                    </div>
+                    <div className="text-2xl font-black self-center pb-5">:</div>
+                    <div className="text-center">
+                      <div className="bg-white/30 backdrop-blur-md rounded-lg px-3 py-2 min-w-[60px]">
+                        <div className="text-2xl font-black">{timeLeft.minutes.toString().padStart(2, '0')}</div>
+                      </div>
+                      <div className="text-xs mt-1 text-white/80">минут</div>
+                    </div>
+                    <div className="text-2xl font-black self-center pb-5">:</div>
+                    <div className="text-center">
+                      <div className="bg-white/30 backdrop-blur-md rounded-lg px-3 py-2 min-w-[60px]">
+                        <div className="text-2xl font-black">{timeLeft.seconds.toString().padStart(2, '0')}</div>
+                      </div>
+                      <div className="text-xs mt-1 text-white/80">секунд</div>
+                    </div>
+                  </div>
+                </div>
                 <Button 
-                  className="bg-white text-red-600 hover:bg-red-50 font-bold"
+                  className="bg-white text-red-600 hover:bg-red-50 font-bold w-full"
                   onClick={() => setSelectedCategory('Куртки')}
                 >
                   Смотреть акции
