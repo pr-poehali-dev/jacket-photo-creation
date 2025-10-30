@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -76,8 +76,25 @@ export default function Index() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('Все');
   const [selectedSize, setSelectedSize] = useState<{ [key: number]: string }>({});
+  const [favorites, setFavorites] = useState<number[]>([]);
 
   const categories = ['Все', 'Зима', 'Весна', 'Демисезон'];
+
+  useEffect(() => {
+    const saved = localStorage.getItem('favorites');
+    if (saved) {
+      setFavorites(JSON.parse(saved));
+    }
+  }, []);
+
+  const toggleFavorite = (productId: number) => {
+    const newFavorites = favorites.includes(productId)
+      ? favorites.filter(id => id !== productId)
+      : [...favorites, productId];
+    
+    setFavorites(newFavorites);
+    localStorage.setItem('favorites', JSON.stringify(newFavorites));
+  };
 
   const filteredProducts = selectedCategory === 'Все' 
     ? products 
@@ -130,8 +147,22 @@ export default function Index() {
             </h1>
           </div>
           
-          <Sheet>
-            <SheetTrigger asChild>
+          <div className="flex items-center gap-3">
+            <Button 
+              variant="outline" 
+              size="lg" 
+              className="relative hover:scale-105 transition-transform"
+              onClick={() => navigate('/favorites')}
+            >
+              <Icon name="Heart" size={20} />
+              {favorites.length > 0 && (
+                <Badge className="absolute -top-2 -right-2 bg-accent hover:bg-accent px-2">
+                  {favorites.length}
+                </Badge>
+              )}
+            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
               <Button variant="outline" size="lg" className="relative hover:scale-105 transition-transform">
                 <Icon name="ShoppingCart" size={20} />
                 {totalItems > 0 && (
@@ -140,8 +171,8 @@ export default function Index() {
                   </Badge>
                 )}
               </Button>
-            </SheetTrigger>
-            <SheetContent className="w-full sm:max-w-lg">
+              </SheetTrigger>
+              <SheetContent className="w-full sm:max-w-lg">
               <SheetHeader>
                 <SheetTitle className="text-2xl">Корзина</SheetTitle>
               </SheetHeader>
@@ -213,8 +244,9 @@ export default function Index() {
                   </>
                 )}
               </div>
-            </SheetContent>
-          </Sheet>
+              </SheetContent>
+            </Sheet>
+          </div>
         </div>
       </header>
 
@@ -258,9 +290,21 @@ export default function Index() {
                     alt={product.name}
                     className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <Badge className="absolute top-4 right-4 bg-secondary hover:bg-secondary">
+                  <Badge className="absolute top-4 left-4 bg-secondary hover:bg-secondary">
                     {product.category}
                   </Badge>
+                  <Button
+                    size="icon"
+                    variant="secondary"
+                    className="absolute top-4 right-4 bg-white/90 hover:bg-white shadow-lg"
+                    onClick={() => toggleFavorite(product.id)}
+                  >
+                    <Icon 
+                      name="Heart" 
+                      size={20} 
+                      className={favorites.includes(product.id) ? "fill-primary text-primary" : ""}
+                    />
+                  </Button>
                 </div>
                 <div className="p-6 space-y-4">
                   <div>
