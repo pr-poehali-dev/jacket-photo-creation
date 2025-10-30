@@ -434,8 +434,9 @@ export default function Index() {
           {filteredAndSortedProducts.map((product, index) => (
             <Card 
               key={product.id} 
-              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 animate-fade-in border-2 hover:border-primary"
+              className="group overflow-hidden hover:shadow-2xl transition-all duration-300 animate-fade-in border-2 hover:border-primary cursor-pointer"
               style={{ animationDelay: `${index * 100}ms` }}
+              onClick={() => navigate(`/product/${product.id}`)}
             >
               <CardContent className="p-0">
                 <div className="relative overflow-hidden">
@@ -458,7 +459,10 @@ export default function Index() {
                     size="icon"
                     variant="secondary"
                     className="absolute top-4 right-4 bg-white/90 hover:bg-white shadow-lg"
-                    onClick={() => toggleFavorite(product.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      toggleFavorite(product.id);
+                    }}
                   >
                     <Icon 
                       name="Heart" 
