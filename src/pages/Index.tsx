@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
+import { Slider } from '@/components/ui/slider';
+import { Label } from '@/components/ui/label';
 import Icon from '@/components/ui/icon';
 
 interface Product {
@@ -77,8 +79,11 @@ export default function Index() {
   const [selectedCategory, setSelectedCategory] = useState<string>('Все');
   const [selectedSize, setSelectedSize] = useState<{ [key: number]: string }>({});
   const [favorites, setFavorites] = useState<number[]>([]);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 25000]);
+  const [filterSize, setFilterSize] = useState<string>('Все');
 
   const categories = ['Все', 'Зима', 'Весна', 'Демисезон'];
+  const sizes = ['Все', 'S', 'M', 'L', 'XL'];
 
   useEffect(() => {
     const saved = localStorage.getItem('favorites');
@@ -96,9 +101,12 @@ export default function Index() {
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
 
-  const filteredProducts = selectedCategory === 'Все' 
-    ? products 
-    : products.filter(p => p.category === selectedCategory);
+  const filteredProducts = products.filter(p => {
+    const categoryMatch = selectedCategory === 'Все' || p.category === selectedCategory;
+    const priceMatch = p.price >= priceRange[0] && p.price <= priceRange[1];
+    const sizeMatch = filterSize === 'Все' || p.sizes.includes(filterSize);
+    return categoryMatch && priceMatch && sizeMatch;
+  });
 
   const addToCart = (product: Product) => {
     const size = selectedSize[product.id] || product.sizes[0];
@@ -260,20 +268,88 @@ export default function Index() {
           </p>
         </section>
 
-        <div className="flex flex-wrap gap-3 justify-center mb-8 animate-fade-in">
-          {categories.map((category) => (
-            <Button
-              key={category}
-              variant={selectedCategory === category ? "default" : "outline"}
-              size="lg"
-              onClick={() => setSelectedCategory(category)}
-              className={selectedCategory === category 
-                ? "bg-gradient-to-r from-primary to-secondary hover:opacity-90" 
-                : "hover:scale-105 transition-transform"}
-            >
-              {category}
-            </Button>
-          ))}
+        <div className="mb-8 space-y-6">
+          <Card className="animate-fade-in">
+            <CardContent className="p-6">
+              <div className="grid md:grid-cols-3 gap-6">
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">Сезон</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {categories.map((category) => (
+                      <Button
+                        key={category}
+                        variant={selectedCategory === category ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setSelectedCategory(category)}
+                        className={selectedCategory === category 
+                          ? "bg-gradient-to-r from-primary to-secondary hover:opacity-90" 
+                          : "hover:scale-105 transition-transform"}
+                      >
+                        {category}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">Размер</Label>
+                  <div className="flex flex-wrap gap-2">
+                    {sizes.map((size) => (
+                      <Button
+                        key={size}
+                        variant={filterSize === size ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setFilterSize(size)}
+                        className={filterSize === size 
+                          ? "bg-gradient-to-r from-primary to-secondary hover:opacity-90" 
+                          : "hover:scale-105 transition-transform"}
+                      >
+                        {size}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-base font-semibold mb-3 block">
+                    Цена: {priceRange[0].toLocaleString()} - {priceRange[1].toLocaleString()} ₽
+                  </Label>
+                  <Slider
+                    min={0}
+                    max={25000}
+                    step={1000}
+                    value={priceRange}
+                    onValueChange={(value) => setPriceRange(value as [number, number])}
+                    className="mt-2"
+                  />
+                  <div className="flex justify-between text-xs text-muted-foreground mt-2">
+                    <span>0 ₽</span>
+                    <span>25 000 ₽</span>
+                  </div>
+                </div>
+              </div>
+
+              {(selectedCategory !== 'Все' || filterSize !== 'Все' || priceRange[0] > 0 || priceRange[1] < 25000) && (
+                <div className="mt-4 pt-4 border-t flex items-center justify-between">
+                  <p className="text-sm text-muted-foreground">
+                    Найдено товаров: {filteredProducts.length}
+                  </p>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedCategory('Все');
+                      setFilterSize('Все');
+                      setPriceRange([0, 25000]);
+                    }}
+                  >
+                    <Icon name="X" size={16} className="mr-2" />
+                    Сбросить фильтры
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
