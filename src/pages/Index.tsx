@@ -72,6 +72,7 @@ const products: Product[] = [
 ];
 
 export default function Index() {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('Все');
   const [selectedSize, setSelectedSize] = useState<{ [key: number]: string }>({});
@@ -202,7 +203,10 @@ export default function Index() {
                         <span>Итого:</span>
                         <span className="text-primary">{totalPrice.toLocaleString('ru-RU')} ₽</span>
                       </div>
-                      <Button className="w-full h-12 text-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90">
+                      <Button 
+                        className="w-full h-12 text-lg bg-gradient-to-r from-primary to-secondary hover:opacity-90"
+                        onClick={() => navigate('/checkout', { state: { cart } })}
+                      >
                         Оформить заказ
                       </Button>
                     </div>
