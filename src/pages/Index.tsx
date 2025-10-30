@@ -404,6 +404,56 @@ export default function Index() {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        <section className="mb-10 animate-fade-in">
+          <div className="grid md:grid-cols-2 gap-6">
+            <Card className="bg-gradient-to-br from-red-500 to-orange-500 text-white overflow-hidden relative group hover:shadow-2xl transition-shadow">
+              <CardContent className="p-8 relative z-10">
+                <Badge className="bg-white text-red-600 mb-4 text-sm font-bold px-3 py-1">
+                  <Icon name="Zap" size={14} className="mr-1" />
+                  Горящее предложение
+                </Badge>
+                <h3 className="text-3xl font-black mb-2">Скидки до 50%</h3>
+                <p className="text-white/90 mb-6 text-lg">
+                  На зимние куртки и верхнюю одежду
+                </p>
+                <Button 
+                  className="bg-white text-red-600 hover:bg-red-50 font-bold"
+                  onClick={() => setSelectedCategory('Куртки')}
+                >
+                  Смотреть акции
+                  <Icon name="ArrowRight" size={18} className="ml-2" />
+                </Button>
+              </CardContent>
+              <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Icon name="Percent" size={180} />
+              </div>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-blue-500 to-purple-600 text-white overflow-hidden relative group hover:shadow-2xl transition-shadow">
+              <CardContent className="p-8 relative z-10">
+                <Badge className="bg-white text-blue-600 mb-4 text-sm font-bold px-3 py-1">
+                  <Icon name="Gift" size={14} className="mr-1" />
+                  Специальное предложение
+                </Badge>
+                <h3 className="text-3xl font-black mb-2">2+1 в подарок</h3>
+                <p className="text-white/90 mb-6 text-lg">
+                  При покупке 2 любых товаров — третий в подарок
+                </p>
+                <Button 
+                  className="bg-white text-blue-600 hover:bg-blue-50 font-bold"
+                  onClick={() => setSelectedCategory('Все')}
+                >
+                  Выбрать товары
+                  <Icon name="ArrowRight" size={18} className="ml-2" />
+                </Button>
+              </CardContent>
+              <div className="absolute -right-10 -bottom-10 opacity-10 group-hover:opacity-20 transition-opacity">
+                <Icon name="Gift" size={180} />
+              </div>
+            </Card>
+          </div>
+        </section>
+
         <section className="mb-8 text-center animate-fade-in">
           <h2 className="text-5xl font-black mb-4 bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
             Коллекция 2025
