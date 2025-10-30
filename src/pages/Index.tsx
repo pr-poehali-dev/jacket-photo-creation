@@ -19,6 +19,8 @@ interface Product {
   sizes: string[];
   isNew?: boolean;
   popularity?: number;
+  rating?: number;
+  reviewCount?: number;
 }
 
 interface CartItem extends Product {
@@ -35,7 +37,9 @@ const products: Product[] = [
     category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
-    popularity: 95
+    popularity: 95,
+    rating: 4.8,
+    reviewCount: 124
   },
   {
     id: 2,
@@ -44,7 +48,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/a0d1e8dc-2f18-41d2-9cb6-f0ee8d9b15d2.jpg',
     category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
-    popularity: 88
+    popularity: 88,
+    rating: 4.5,
+    reviewCount: 89
   },
   {
     id: 3,
@@ -54,7 +60,9 @@ const products: Product[] = [
     category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
-    popularity: 92
+    popularity: 92,
+    rating: 4.9,
+    reviewCount: 156
   },
   {
     id: 4,
@@ -63,7 +71,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/a407ee41-b97d-4dcf-a669-cfb719e6ac31.jpg',
     category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
-    popularity: 78
+    popularity: 78,
+    rating: 4.3,
+    reviewCount: 67
   },
   {
     id: 5,
@@ -72,7 +82,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/17d98437-5732-4520-9279-b3ffc11186ef.jpg',
     category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
-    popularity: 85
+    popularity: 85,
+    rating: 4.6,
+    reviewCount: 98
   },
   {
     id: 6,
@@ -82,7 +94,9 @@ const products: Product[] = [
     category: 'Куртки',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
-    popularity: 90
+    popularity: 90,
+    rating: 4.7,
+    reviewCount: 112
   },
   {
     id: 7,
@@ -92,7 +106,9 @@ const products: Product[] = [
     category: 'Шапки',
     sizes: ['Универсальный'],
     isNew: true,
-    popularity: 87
+    popularity: 87,
+    rating: 4.4,
+    reviewCount: 73
   },
   {
     id: 8,
@@ -101,7 +117,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/aca4f13f-c7aa-4473-b21d-d8af3fe9adfe.jpg',
     category: 'Шапки',
     sizes: ['S/M', 'L/XL'],
-    popularity: 93
+    popularity: 93,
+    rating: 4.9,
+    reviewCount: 201
   },
   {
     id: 9,
@@ -110,7 +128,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/8dd7be39-7800-4542-8c5d-696d45bc4875.jpg',
     category: 'Шапки',
     sizes: ['Универсальный'],
-    popularity: 80
+    popularity: 80,
+    rating: 4.2,
+    reviewCount: 54
   },
   {
     id: 10,
@@ -120,7 +140,9 @@ const products: Product[] = [
     category: 'Ботинки',
     sizes: ['39', '40', '41', '42', '43', '44', '45'],
     isNew: true,
-    popularity: 96
+    popularity: 96,
+    rating: 4.9,
+    reviewCount: 287
   },
   {
     id: 11,
@@ -129,7 +151,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/44493105-7a54-45f3-b7d4-cc64c0aa95ad.jpg',
     category: 'Ботинки',
     sizes: ['39', '40', '41', '42', '43', '44'],
-    popularity: 89
+    popularity: 89,
+    rating: 4.6,
+    reviewCount: 143
   },
   {
     id: 12,
@@ -138,7 +162,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/0de97760-84f2-4c1f-a01b-b0c4f95a6100.jpg',
     category: 'Ботинки',
     sizes: ['40', '41', '42', '43', '44'],
-    popularity: 84
+    popularity: 84,
+    rating: 4.7,
+    reviewCount: 92
   },
   {
     id: 13,
@@ -148,7 +174,9 @@ const products: Product[] = [
     category: 'Рукавицы',
     sizes: ['S', 'M', 'L', 'XL'],
     isNew: true,
-    popularity: 86
+    popularity: 86,
+    rating: 4.5,
+    reviewCount: 81
   },
   {
     id: 14,
@@ -157,7 +185,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/09bae8d0-f9d8-441b-acdc-27f039ee188c.jpg',
     category: 'Рукавицы',
     sizes: ['S/M', 'L/XL'],
-    popularity: 82
+    popularity: 82,
+    rating: 4.3,
+    reviewCount: 65
   },
   {
     id: 15,
@@ -166,7 +196,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/ac005337-77c1-4171-8df9-69d47a3577b3.jpg',
     category: 'Рукавицы',
     sizes: ['S', 'M', 'L', 'XL'],
-    popularity: 91
+    popularity: 91,
+    rating: 4.8,
+    reviewCount: 176
   },
   {
     id: 16,
@@ -176,7 +208,9 @@ const products: Product[] = [
     category: 'Штаны',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
     isNew: true,
-    popularity: 88
+    popularity: 88,
+    rating: 4.6,
+    reviewCount: 104
   },
   {
     id: 17,
@@ -185,7 +219,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/cde9ed02-75e9-4f82-98ec-3ac043b3894f.jpg',
     category: 'Штаны',
     sizes: ['S', 'M', 'L', 'XL'],
-    popularity: 94
+    popularity: 94,
+    rating: 4.8,
+    reviewCount: 189
   },
   {
     id: 18,
@@ -194,7 +230,9 @@ const products: Product[] = [
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/9dcdde27-5f21-4a0e-9431-4e9b8f246db9.jpg',
     category: 'Штаны',
     sizes: ['S', 'M', 'L', 'XL', 'XXL'],
-    popularity: 85
+    popularity: 85,
+    rating: 4.4,
+    reviewCount: 97
   }
 ];
 
@@ -269,6 +307,8 @@ export default function Index() {
           return b.price - a.price;
         case 'popularity':
           return (b.popularity || 0) - (a.popularity || 0);
+        case 'rating':
+          return (b.rating || 0) - (a.rating || 0);
         case 'new':
           if (a.isNew && !b.isNew) return -1;
           if (!a.isNew && b.isNew) return 1;
@@ -647,6 +687,7 @@ export default function Index() {
                 <SelectItem value="price-asc">Цена: по возрастанию</SelectItem>
                 <SelectItem value="price-desc">Цена: по убыванию</SelectItem>
                 <SelectItem value="popularity">По популярности</SelectItem>
+                <SelectItem value="rating">По рейтингу</SelectItem>
                 <SelectItem value="new">Новинки</SelectItem>
               </SelectContent>
             </Select>
@@ -697,6 +738,24 @@ export default function Index() {
                 <div className="p-6 space-y-4">
                   <div>
                     <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                    {product.rating && product.reviewCount && (
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="flex items-center gap-1">
+                          {[1, 2, 3, 4, 5].map((star) => (
+                            <Icon
+                              key={star}
+                              name="Star"
+                              size={16}
+                              className={star <= Math.round(product.rating!) 
+                                ? "fill-yellow-400 text-yellow-400" 
+                                : "text-gray-300"}
+                            />
+                          ))}
+                        </div>
+                        <span className="text-sm font-semibold">{product.rating}</span>
+                        <span className="text-sm text-muted-foreground">({product.reviewCount})</span>
+                      </div>
+                    )}
                     <p className="text-2xl font-black text-primary">
                       {product.price.toLocaleString('ru-RU')} ₽
                     </p>
@@ -710,7 +769,10 @@ export default function Index() {
                           key={size}
                           variant={selectedSize[product.id] === size ? "default" : "outline"}
                           size="sm"
-                          onClick={() => setSelectedSize({ ...selectedSize, [product.id]: size })}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedSize({ ...selectedSize, [product.id]: size });
+                          }}
                           className={selectedSize[product.id] === size 
                             ? "bg-gradient-to-r from-primary to-secondary" 
                             : ""}
@@ -723,7 +785,10 @@ export default function Index() {
                   
                   <Button 
                     className="w-full h-12 bg-gradient-to-r from-primary to-secondary hover:opacity-90 text-base font-semibold"
-                    onClick={() => addToCart(product)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addToCart(product);
+                    }}
                   >
                     <Icon name="ShoppingCart" size={18} className="mr-2" />
                     В корзину
