@@ -250,6 +250,9 @@ export default function Index() {
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
 
+  const jacketsSaleCount = products.filter(p => p.category === 'Куртки').length;
+  const totalProductsCount = products.length;
+
   const filteredAndSortedProducts = products
     .filter(p => {
       const categoryMatch = selectedCategory === 'Все' || p.category === selectedCategory;
@@ -435,9 +438,13 @@ export default function Index() {
                   Горящее предложение
                 </Badge>
                 <h3 className="text-3xl font-black mb-2">Скидки до 50%</h3>
-                <p className="text-white/90 mb-4 text-lg">
+                <p className="text-white/90 mb-2 text-lg">
                   На зимние куртки и верхнюю одежду
                 </p>
+                <Badge className="bg-yellow-400 text-yellow-900 mb-4">
+                  <Icon name="Package" size={14} className="mr-1" />
+                  {jacketsSaleCount} товаров в акции
+                </Badge>
                 <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 mb-6">
                   <p className="text-sm text-white/80 mb-2 font-semibold flex items-center gap-2">
                     <Icon name="Clock" size={16} />
@@ -486,9 +493,13 @@ export default function Index() {
                   Специальное предложение
                 </Badge>
                 <h3 className="text-3xl font-black mb-2">2+1 в подарок</h3>
-                <p className="text-white/90 mb-6 text-lg">
+                <p className="text-white/90 mb-2 text-lg">
                   При покупке 2 любых товаров — третий в подарок
                 </p>
+                <Badge className="bg-white/90 text-blue-600 mb-6">
+                  <Icon name="ShoppingBag" size={14} className="mr-1" />
+                  Доступно на {totalProductsCount} товаров
+                </Badge>
                 <Button 
                   className="bg-white text-blue-600 hover:bg-blue-50 font-bold"
                   onClick={() => setSelectedCategory('Все')}
