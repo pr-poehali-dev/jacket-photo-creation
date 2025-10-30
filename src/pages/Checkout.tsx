@@ -45,11 +45,26 @@ export default function Checkout() {
   const [promoCode, setPromoCode] = useState('');
   const [appliedPromo, setAppliedPromo] = useState<{code: string, discount: number} | null>(null);
 
-  const promoCodes: {[key: string]: {discount: number, type: 'percent' | 'fixed'}} = {
-    'WINTER2025': { discount: 15, type: 'percent' },
-    'SAVE500': { discount: 500, type: 'fixed' },
-    'NEW10': { discount: 10, type: 'percent' },
-    'FREESHIP': { discount: 0, type: 'fixed' }
+  const promoCodes: {[key: string]: {discount: number, type: 'percent' | 'fixed', expiresAt?: string, description: string}} = {
+    'WINTER2025': { discount: 15, type: 'percent', expiresAt: '2025-03-01', description: 'Зимняя распродажа' },
+    'SAVE500': { discount: 500, type: 'fixed', description: 'Скидка на первый заказ' },
+    'NEW10': { discount: 10, type: 'percent', expiresAt: '2025-12-31', description: 'Для новых покупателей' },
+    'FREESHIP': { discount: 0, type: 'fixed', description: 'Бесплатная доставка' },
+    'FLASH50': { discount: 50, type: 'percent', expiresAt: '2025-11-15', description: 'Флеш-распродажа' }
+  };
+
+  const getTimeLeft = (expiresAt: string) => {
+    const now = new Date();
+    const expiry = new Date(expiresAt);
+    const diff = expiry.getTime() - now.getTime();
+    
+    if (diff <= 0) return null;
+    
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    
+    if (days > 0) return `${days} дн.`;
+    return `${hours} ч.`;
   };
 
   const totalPrice = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -75,14 +90,29 @@ export default function Checkout() {
   const applyPromoCode = () => {
     const upperCode = promoCode.toUpperCase();
     if (promoCodes[upperCode]) {
-      setAppliedPromo({ code: upperCode, discount: promoCodes[upperCode].discount });
+      const promo = promoCodes[upperCode];
+      
+      if (promo.expiresAt) {
+        const now = new Date();
+        const expiry = new Date(promo.expiresAt);
+        if (now > expiry) {
+          toast({
+            title: 'Промокод истёк',
+            description: 'Срок действия промокода закончился',
+            variant: 'destructive'
+          });
+          return;
+        }
+      }
+      
+      setAppliedPromo({ code: upperCode, discount: promo.discount });
       toast({
         title: 'Промокод применён! 🎉',
         description: upperCode === 'FREESHIP' 
           ? 'Бесплатная доставка активирована'
-          : promoCodes[upperCode].type === 'percent'
-          ? `Скидка ${promoCodes[upperCode].discount}% на заказ`
-          : `Скидка ${promoCodes[upperCode].discount} ₽ на заказ`,
+          : promo.type === 'percent'
+          ? `Скидка ${promo.discount}% на заказ`
+          : `Скидка ${promo.discount} ₽ на заказ`,
       });
     } else {
       toast({
@@ -422,10 +452,33 @@ export default function Checkout() {
 
                 <Separator />
 
-                <div>
-                  <Label htmlFor="promoCode" className="text-sm font-semibold mb-2 block">
-                    Промокод
-                  </Label>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label htmlFor="promoCode" className="text-sm font-semibold">
+                      Промокод
+                    </Label>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => {
+                        const promoList = Object.entries(promoCodes)
+                          .map(([code, data]) => {
+                            const timeLeft = data.expiresAt ? getTimeLeft(data.expiresAt) : null;
+                            return `• ${code} - ${data.description}${timeLeft ? ` (осталось ${timeLeft})` : ''}`;
+                          })
+                          .join('\n');
+                        toast({
+                          title: 'Доступные промокоды',
+                          description: promoList,
+                        });
+                      }}
+                      className="text-xs text-primary hover:text-primary/80 gap-1 h-auto p-1"
+                    >
+                      <Icon name="Sparkles" size={14} />
+                      Акции
+                    </Button>
+                  </div>
+
                   {appliedPromo ? (
                     <div className="bg-green-50 border border-green-200 rounded-lg p-3 flex items-center justify-between">
                       <div className="flex items-center gap-2">
@@ -433,9 +486,10 @@ export default function Checkout() {
                         <div>
                           <p className="font-semibold text-green-800">{appliedPromo.code}</p>
                           <p className="text-xs text-green-600">
-                            {appliedPromo.code === 'FREESHIP' 
-                              ? 'Бесплатная доставка'
-                              : `Скидка ${appliedPromo.discount}${promoCodes[appliedPromo.code].type === 'percent' ? '%' : ' ₽'}`}
+                            {promoCodes[appliedPromo.code].description}
+                            {promoCodes[appliedPromo.code].expiresAt && getTimeLeft(promoCodes[appliedPromo.code].expiresAt!) && (
+                              <span className="ml-1">• осталось {getTimeLeft(promoCodes[appliedPromo.code].expiresAt!)}</span>
+                            )}
                           </p>
                         </div>
                       </div>
