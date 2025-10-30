@@ -58,12 +58,23 @@ export default function Checkout() {
       return;
     }
 
-    toast({
-      title: "Заказ оформлен! 🎉",
-      description: `Спасибо за покупку! Мы свяжемся с вами по телефону ${formData.phone}`,
-    });
+    const orderNumber = `FS${Date.now().toString().slice(-8)}`;
+    const orderDetails = {
+      orderNumber,
+      fullName: formData.fullName,
+      phone: formData.phone,
+      email: formData.email,
+      address: formData.address,
+      city: formData.city,
+      deliveryMethod: formData.deliveryMethod,
+      paymentMethod: formData.paymentMethod,
+      totalPrice,
+      deliveryPrice,
+      finalPrice,
+      items: cart
+    };
 
-    setTimeout(() => navigate('/'), 2000);
+    navigate('/order-success', { state: { orderDetails } });
   };
 
   if (cart.length === 0) {
