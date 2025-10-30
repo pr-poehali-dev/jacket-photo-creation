@@ -6,6 +6,7 @@ import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Slider } from '@/components/ui/slider';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import Icon from '@/components/ui/icon';
 
 interface Product {
@@ -15,6 +16,8 @@ interface Product {
   image: string;
   category: string;
   sizes: string[];
+  isNew?: boolean;
+  popularity?: number;
 }
 
 interface CartItem extends Product {
@@ -29,7 +32,9 @@ const products: Product[] = [
     price: 12990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/b88b744f-24d8-48fb-9014-f4abbac17917.jpg',
     category: 'Зима',
-    sizes: ['S', 'M', 'L', 'XL']
+    sizes: ['S', 'M', 'L', 'XL'],
+    isNew: true,
+    popularity: 95
   },
   {
     id: 2,
@@ -37,7 +42,8 @@ const products: Product[] = [
     price: 8990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/99771fe5-6707-4a8c-9a70-695388bc82de.jpg',
     category: 'Весна',
-    sizes: ['S', 'M', 'L', 'XL']
+    sizes: ['S', 'M', 'L', 'XL'],
+    popularity: 88
   },
   {
     id: 3,
@@ -45,7 +51,9 @@ const products: Product[] = [
     price: 14990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/f0dfce24-5fb1-41d4-80f5-673eb9eb8a0c.jpg',
     category: 'Зима',
-    sizes: ['S', 'M', 'L', 'XL']
+    sizes: ['S', 'M', 'L', 'XL'],
+    isNew: true,
+    popularity: 92
   },
   {
     id: 4,
@@ -53,7 +61,8 @@ const products: Product[] = [
     price: 19990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/b88b744f-24d8-48fb-9014-f4abbac17917.jpg',
     category: 'Демисезон',
-    sizes: ['S', 'M', 'L', 'XL']
+    sizes: ['S', 'M', 'L', 'XL'],
+    popularity: 78
   },
   {
     id: 5,
@@ -61,7 +70,8 @@ const products: Product[] = [
     price: 6990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/99771fe5-6707-4a8c-9a70-695388bc82de.jpg',
     category: 'Весна',
-    sizes: ['S', 'M', 'L', 'XL']
+    sizes: ['S', 'M', 'L', 'XL'],
+    popularity: 85
   },
   {
     id: 6,
@@ -69,7 +79,9 @@ const products: Product[] = [
     price: 16990,
     image: 'https://cdn.poehali.dev/projects/9e89350b-a4e3-4b59-9b5f-cceb089d7f20/files/f0dfce24-5fb1-41d4-80f5-673eb9eb8a0c.jpg',
     category: 'Зима',
-    sizes: ['S', 'M', 'L', 'XL']
+    sizes: ['S', 'M', 'L', 'XL'],
+    isNew: true,
+    popularity: 90
   }
 ];
 
@@ -81,6 +93,7 @@ export default function Index() {
   const [favorites, setFavorites] = useState<number[]>([]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 25000]);
   const [filterSize, setFilterSize] = useState<string>('Все');
+  const [sortBy, setSortBy] = useState<string>('default');
 
   const categories = ['Все', 'Зима', 'Весна', 'Демисезон'];
   const sizes = ['Все', 'S', 'M', 'L', 'XL'];
@@ -101,12 +114,29 @@ export default function Index() {
     localStorage.setItem('favorites', JSON.stringify(newFavorites));
   };
 
-  const filteredProducts = products.filter(p => {
-    const categoryMatch = selectedCategory === 'Все' || p.category === selectedCategory;
-    const priceMatch = p.price >= priceRange[0] && p.price <= priceRange[1];
-    const sizeMatch = filterSize === 'Все' || p.sizes.includes(filterSize);
-    return categoryMatch && priceMatch && sizeMatch;
-  });
+  const filteredAndSortedProducts = products
+    .filter(p => {
+      const categoryMatch = selectedCategory === 'Все' || p.category === selectedCategory;
+      const priceMatch = p.price >= priceRange[0] && p.price <= priceRange[1];
+      const sizeMatch = filterSize === 'Все' || p.sizes.includes(filterSize);
+      return categoryMatch && priceMatch && sizeMatch;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'price-asc':
+          return a.price - b.price;
+        case 'price-desc':
+          return b.price - a.price;
+        case 'popularity':
+          return (b.popularity || 0) - (a.popularity || 0);
+        case 'new':
+          if (a.isNew && !b.isNew) return -1;
+          if (!a.isNew && b.isNew) return 1;
+          return 0;
+        default:
+          return 0;
+      }
+    });
 
   const addToCart = (product: Product) => {
     const size = selectedSize[product.id] || product.sizes[0];
@@ -329,10 +359,10 @@ export default function Index() {
                 </div>
               </div>
 
-              {(selectedCategory !== 'Все' || filterSize !== 'Все' || priceRange[0] > 0 || priceRange[1] < 25000) && (
+              {(selectedCategory !== 'Все' || filterSize !== 'Все' || priceRange[0] > 0 || priceRange[1] < 25000 || sortBy !== 'default') && (
                 <div className="mt-4 pt-4 border-t flex items-center justify-between">
                   <p className="text-sm text-muted-foreground">
-                    Найдено товаров: {filteredProducts.length}
+                    Найдено товаров: {filteredAndSortedProducts.length}
                   </p>
                   <Button
                     variant="ghost"
@@ -341,6 +371,7 @@ export default function Index() {
                       setSelectedCategory('Все');
                       setFilterSize('Все');
                       setPriceRange([0, 25000]);
+                      setSortBy('default');
                     }}
                   >
                     <Icon name="X" size={16} className="mr-2" />
@@ -352,8 +383,29 @@ export default function Index() {
           </Card>
         </div>
 
+        <div className="mb-6 flex items-center justify-between">
+          <h3 className="text-lg font-semibold">
+            Показано товаров: {filteredAndSortedProducts.length}
+          </h3>
+          <div className="flex items-center gap-3">
+            <Label className="text-sm font-medium">Сортировка:</Label>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger className="w-[200px]">
+                <SelectValue placeholder="Выберите сортировку" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="default">По умолчанию</SelectItem>
+                <SelectItem value="price-asc">Цена: по возрастанию</SelectItem>
+                <SelectItem value="price-desc">Цена: по убыванию</SelectItem>
+                <SelectItem value="popularity">По популярности</SelectItem>
+                <SelectItem value="new">Новинки</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredProducts.map((product, index) => (
+          {filteredAndSortedProducts.map((product, index) => (
             <Card 
               key={product.id} 
               className="group overflow-hidden hover:shadow-2xl transition-all duration-300 animate-fade-in border-2 hover:border-primary"
@@ -366,9 +418,16 @@ export default function Index() {
                     alt={product.name}
                     className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                   />
-                  <Badge className="absolute top-4 left-4 bg-secondary hover:bg-secondary">
-                    {product.category}
-                  </Badge>
+                  <div className="absolute top-4 left-4 flex flex-col gap-2">
+                    <Badge className="bg-secondary hover:bg-secondary">
+                      {product.category}
+                    </Badge>
+                    {product.isNew && (
+                      <Badge className="bg-accent hover:bg-accent">
+                        Новинка
+                      </Badge>
+                    )}
+                  </div>
                   <Button
                     size="icon"
                     variant="secondary"
