@@ -50,7 +50,8 @@ export default function Checkout() {
     'SAVE500': { discount: 500, type: 'fixed', description: 'Скидка на первый заказ' },
     'NEW10': { discount: 10, type: 'percent', expiresAt: '2025-12-31', description: 'Для новых покупателей' },
     'FREESHIP': { discount: 0, type: 'fixed', description: 'Бесплатная доставка' },
-    'FLASH50': { discount: 50, type: 'percent', expiresAt: '2025-11-15', description: 'Флеш-распродажа' }
+    'FLASH50': { discount: 50, type: 'percent', expiresAt: '2025-11-15', description: 'Флеш-распродажа' },
+    'DEV100': { discount: 100, type: 'percent', description: 'Скидка для разработчиков' }
   };
 
   const getTimeLeft = (expiresAt: string) => {
