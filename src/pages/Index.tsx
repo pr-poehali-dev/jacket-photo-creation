@@ -483,7 +483,7 @@ export default function Index() {
                     Используй промокоды при оформлении заказа и получи выгоду!
                   </p>
                   
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     <div className="bg-gradient-to-br from-purple-500/20 to-purple-600/10 border border-purple-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer">
                       <div className="flex items-center justify-between mb-2">
                         <Badge className="bg-purple-600 text-white font-bold text-xs">WINTER2025</Badge>
@@ -503,6 +503,18 @@ export default function Index() {
                       </div>
                       <p className="text-sm font-semibold text-foreground">Скидка 50%</p>
                       <p className="text-xs text-muted-foreground">флеш-распродажа</p>
+                    </div>
+
+                    <div className="bg-gradient-to-br from-cyan-500/20 to-cyan-600/10 border border-cyan-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer relative overflow-hidden">
+                      <div className="absolute top-0 right-0 bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-[10px] font-bold px-2 py-1 rounded-bl-lg">
+                        DEV 💻
+                      </div>
+                      <div className="flex items-center justify-between mb-2">
+                        <Badge className="bg-gradient-to-r from-cyan-600 to-blue-600 text-white font-bold text-xs">DEV100</Badge>
+                        <Icon name="Code" size={16} className="text-cyan-600" />
+                      </div>
+                      <p className="text-sm font-semibold text-foreground">Скидка 100%</p>
+                      <p className="text-xs text-muted-foreground">для разработчиков</p>
                     </div>
 
                     <div className="bg-gradient-to-br from-green-500/20 to-green-600/10 border border-green-500/30 rounded-xl p-4 hover:scale-105 transition-transform cursor-pointer">
