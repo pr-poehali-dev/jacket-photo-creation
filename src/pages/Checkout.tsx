@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -42,7 +42,7 @@ export default function Checkout() {
     deliveryTime: 'anytime'
   });
 
-  const [promoCode, setPromoCode] = useState('');
+  const [promoCode, setPromoCode] = useState('DEV100');
   const [appliedPromo, setAppliedPromo] = useState<{code: string, discount: number} | null>(null);
 
   const promoCodes: {[key: string]: {discount: number, type: 'percent' | 'fixed', expiresAt?: string, description: string}} = {
@@ -53,6 +53,16 @@ export default function Checkout() {
     'FLASH50': { discount: 50, type: 'percent', expiresAt: '2025-11-15', description: 'Флеш-распродажа' },
     'DEV100': { discount: 100, type: 'percent', description: 'Скидка для разработчиков' }
   };
+
+  useEffect(() => {
+    if (cart.length > 0 && !appliedPromo) {
+      setAppliedPromo({ code: 'DEV100', discount: 100 });
+      toast({
+        title: 'Промокод DEV100 применён! 💻',
+        description: 'Скидка 100% для разработчиков активирована',
+      });
+    }
+  }, []);
 
   const getTimeLeft = (expiresAt: string) => {
     const now = new Date();
